@@ -1,12 +1,17 @@
 package com.silviotmalmeida.app.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 // classe que representa uma entidade User
@@ -17,18 +22,28 @@ import jakarta.persistence.Table;
 @Table(name = "tb_user")
 public class User implements Serializable {
 
-	// atributo serial (obrigatório em serializables, gerado automaticamente)
+	// atributo serial (obrigatório em serializables)
 	private static final long serialVersionUID = 1L;
 
-	// declaração dos atributos	
+	// declaração dos atributos
 	//// definindo o id como chave primária autoincrementável
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;	
+	private Long id;
+
 	private String name;
 	private String email;
 	private String phone;
 	private String password;
+
+	// associação 1xn com a entidade Order
+	// definindo o nome do atributo do objeto Order a ser considerado na associação
+	// a anotação JsonIgnore serve informar que esta entidade não irá apresentar os
+	// dados desta associação para evitar loop infinito na resposta e deve ser
+	// colocado em um dos lados das associações
+	@JsonIgnore
+	@OneToMany(mappedBy = "client")
+	private List<Order> orders = new ArrayList<>();
 
 	// construtor vazio (necessário para o framework)
 	public User() {
@@ -45,6 +60,7 @@ public class User implements Serializable {
 	}
 
 	// início dos getters e setters
+	// ------------------------------------------------------------------
 	public Long getId() {
 		return id;
 	}
@@ -85,7 +101,14 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
+	public List<Order> getOrders() {
+		return orders;
+	}
+	// fim dos getters e setters
+	// ------------------------------------------------------------------
+
 	// hashcode e equals para permitir comparação de objetos
+	// ------------------------------------------------------------------
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -102,5 +125,6 @@ public class User implements Serializable {
 		User other = (User) obj;
 		return Objects.equals(id, other.id);
 	}
+	// ------------------------------------------------------------------
 
 }
