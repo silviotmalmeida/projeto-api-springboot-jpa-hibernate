@@ -1,0 +1,24 @@
+version: '3.5'
+
+services:
+
+  #nome do servico
+  api-springboot-jpa-hibernate:
+
+    #construido a partir de uma imagem oficial
+    image: eclipse-temurin:17-jdk-focal
+    
+    #nome do conteiner
+    container_name: api-springboot-jpa-hibernate
+
+    #pastas compartilhadas
+    volumes:
+      #pasta do codigo fonte da aplicacao
+      - "./app:/app"
+
+    #porta a ser exposta
+    ports:
+      - 8080:8080
+  
+    #artifício para manter o container aberto
+    tty: true

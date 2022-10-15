@@ -85,10 +85,12 @@ public class Order implements Serializable {
     }
 
     public OrderStatus getOrderStatus() {
+        // retorna o valor decodificado do status do pedido a partir do índice
         return OrderStatus.valueOf(orderStatus);
     }
 
     public void setOrderStatus(OrderStatus orderStatus) {
+        // se existir o status do pedido, atribui o valor do índice
         if (orderStatus != null) {
             this.orderStatus = orderStatus.getCode();
         }
