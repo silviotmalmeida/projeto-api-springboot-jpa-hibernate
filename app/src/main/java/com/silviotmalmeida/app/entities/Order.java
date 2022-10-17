@@ -2,6 +2,8 @@ package com.silviotmalmeida.app.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.silviotmalmeida.app.entities.enums.OrderStatus;
@@ -12,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 // classe que representa uma entidade Order
@@ -44,6 +47,12 @@ public class Order implements Serializable {
     // o status do pedido será do tipo inteiro, porém associado ao tipo enumerado
     // OrdeStatus
     private int orderStatus;
+
+    // associação 1xn com a entidade OrderItem
+    // definindo o nome do atributo do objeto OrderItem a ser considerado na
+    // associação
+    @OneToMany(mappedBy = "id.order")
+    private Set<OrderItem> items = new HashSet<>();
 
     // construtor vazio (necessário para o framework)
     public Order() {
@@ -94,6 +103,10 @@ public class Order implements Serializable {
         if (orderStatus != null) {
             this.orderStatus = orderStatus.getCode();
         }
+    }
+
+    public Set<OrderItem> getItems() {
+        return items;
     }
 
     // fim dos getters e setters
