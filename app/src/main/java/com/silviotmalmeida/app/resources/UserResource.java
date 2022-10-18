@@ -1,13 +1,17 @@
 package com.silviotmalmeida.app.resources;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.silviotmalmeida.app.entities.User;
 import com.silviotmalmeida.app.services.UserService;
@@ -46,4 +50,18 @@ public class UserResource {
 		return ResponseEntity.ok().body(obj);
 	}
 
+	// método que insere um registro no BD
+	// acessível via método POST, com a passagem dos atributos pelo body
+	@PostMapping
+	public ResponseEntity<User> insert(@RequestBody User obj) {
+
+		// inserindo o registro
+		obj = this.service.insert(obj);
+
+		// construindo a location do novo registro
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+
+		// retorna a resposta com status 201, location no header e registros no body
+		return ResponseEntity.created(uri).body(obj);
+	}
 }

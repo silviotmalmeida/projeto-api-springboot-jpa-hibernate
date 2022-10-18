@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 // classe que representa uma entidade Product
@@ -36,11 +39,17 @@ public class Product implements Serializable {
 
     // associação nxn com a entidade Category
     // este relacionamento só precisa ser implementado em uma das classes e
-    // referenciado na outra
+    // referenciado na outra pois a tabela de associação não tem dados próprios
     // definindo a tabela de associação e os atributos da mesma
     @ManyToMany
     @JoinTable(name = "tb_product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
+
+    // associação 1xn com a entidade OrderItem
+    // definindo o nome do atributo do objeto OrderItem a ser considerado na
+    // associação
+    @OneToMany(mappedBy = "id.product")
+    private Set<OrderItem> items = new HashSet<>();
 
     // construtor vazio (necessário para o framework)
     public Product() {
@@ -100,6 +109,27 @@ public class Product implements Serializable {
 
     public Set<Category> getCategories() {
         return categories;
+    }
+
+    // deverá retornar um conjunto de pedidos a partir dos itens de pedido
+    // a anotação JsonIgnore serve informar que esta entidade não irá apresentar os
+    // dados desta associação para evitar loop infinito na resposta e deve ser
+    // colocado em um dos lados das associações
+    @JsonIgnore
+    public Set<Order> getOrders() {
+
+        // inicializando o conjunto vazio
+        Set<Order> set = new HashSet<>();
+
+        // iterando sobre os itens de pedido
+        for (OrderItem x : this.items) {
+
+            // adicionando somente os pedidos
+            set.add(x.getOrder());
+        }
+
+        // retornando o conjunto de pedidos
+        return set;
     }
     // fim dos getters e setters
     // ------------------------------------------------------------------

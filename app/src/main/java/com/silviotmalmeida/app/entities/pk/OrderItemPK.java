@@ -21,12 +21,16 @@ public class OrderItemPK implements Serializable {
 
     // associação nx1 com a entidade Order
     // definindo o nome da coluna com a chave estrangeira para order_id
+    // como trata-se de chave primária composta, o tratamento com @JsonIgnore deverá
+    // ser feito no getOrder da classe OrderItem
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
 
     // associação nx1 com a entidade Product
     // definindo o nome da coluna com a chave estrangeira para product_id
+    // como trata-se de chave primária composta, o tratamento com @JsonIgnore deverá
+    // ser feito no getProduct da classe OrderItem
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;

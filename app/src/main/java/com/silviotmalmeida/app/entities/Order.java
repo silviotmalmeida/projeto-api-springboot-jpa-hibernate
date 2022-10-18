@@ -8,6 +8,7 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.silviotmalmeida.app.entities.enums.OrderStatus;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 // classe que representa uma entidade Order
@@ -53,6 +55,13 @@ public class Order implements Serializable {
     // associação
     @OneToMany(mappedBy = "id.order")
     private Set<OrderItem> items = new HashSet<>();
+
+    // associação 1x1 com a entidade Payment
+    // definindo o nome do atributo do objeto Payment a ser considerado na
+    // associação, bem como a condição cascade, para manter o mesmo id nas classes
+    // principal e dependente
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Payment payment;
 
     // construtor vazio (necessário para o framework)
     public Order() {
@@ -109,6 +118,13 @@ public class Order implements Serializable {
         return items;
     }
 
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+    }
     // fim dos getters e setters
     // ------------------------------------------------------------------
 
@@ -139,5 +155,20 @@ public class Order implements Serializable {
         return true;
     }
     // ------------------------------------------------------------------
+
+    // métodos adicionais
+    // ------------------------------------------------------------------
+
+    // método que retorna o valor total deste pedido
+    public Double getTotal() {
+
+        Double sum = 0.0;
+
+        for (OrderItem x : this.items) {
+
+            sum += x.getSubTotal();
+        }
+        return sum;
+    }
 
 }

@@ -2,6 +2,7 @@ package com.silviotmalmeida.app.entities;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.silviotmalmeida.app.entities.pk.OrderItemPK;
 
 import jakarta.persistence.EmbeddedId;
@@ -23,7 +24,7 @@ public class OrderItem implements Serializable {
     // declaração dos atributos
     // atributo que vai representar a chave primária composta da tabela
     @EmbeddedId
-    private OrderItemPK id;
+    private OrderItemPK id = new OrderItemPK();
 
     private Integer quantity;
     private Double price;
@@ -44,6 +45,11 @@ public class OrderItem implements Serializable {
 
     // início dos getters e setters
     // ------------------------------------------------------------------
+
+    // a anotação JsonIgnore serve informar que esta entidade não irá apresentar os
+    // dados desta associação para evitar loop infinito na resposta e deve ser
+    // colocado em um dos lados das associações
+    @JsonIgnore
     public Order getOrder() {
         return id.getOrder();
     }
@@ -104,4 +110,14 @@ public class OrderItem implements Serializable {
             return false;
         return true;
     }
+    // ------------------------------------------------------------------
+
+    // métodos adicionais
+    // ------------------------------------------------------------------
+
+    // método que retorna o valor total deste item de pedido
+    public Double getSubTotal() {
+        return this.price * this.quantity;
+    }
+
 }

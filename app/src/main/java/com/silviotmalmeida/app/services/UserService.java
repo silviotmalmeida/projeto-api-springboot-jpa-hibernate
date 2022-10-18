@@ -33,4 +33,10 @@ public class UserService {
 		return obj.get();
 	}
 
+	// método que insere um registro no BD
+	public User insert(User obj) {
+
+		// retorna o registro, após a inserção
+		return this.repository.save(obj);
+	}
 }
