@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,7 +36,7 @@ public class UserResource {
 		// obtendo a lista de registros
 		List<User> list = this.service.findAll();
 
-		// retorna a resposta com status OK e registros no body
+		// retorna a resposta com status 200 e registros no body
 		return ResponseEntity.ok().body(list);
 	}
 
@@ -46,7 +48,7 @@ public class UserResource {
 		// obtendo o registro
 		User obj = this.service.findById(id);
 
-		// retorna a resposta com status OK e registros no body
+		// retorna a resposta com status 200 e registros no body
 		return ResponseEntity.ok().body(obj);
 	}
 
@@ -63,5 +65,29 @@ public class UserResource {
 
 		// retorna a resposta com status 201, location no header e registros no body
 		return ResponseEntity.created(uri).body(obj);
+	}
+
+	// método que remove um registro no BD
+	// acessível via método DELETE, adicionando o parâmetro /id
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
+
+		// removendo o registro
+		this.service.delete(id);
+
+		// retorna a resposta com status 204
+		return ResponseEntity.noContent().build();
+	}
+
+	// método que edita um registro no BD
+	// acessível via método PUT, adicionando o parâmetro /id
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User obj) {
+
+		// editando o registro
+		obj = this.service.update(id, obj);
+
+		// retorna a resposta com status 200 e registros no body
+		return ResponseEntity.ok().body(obj);
 	}
 }

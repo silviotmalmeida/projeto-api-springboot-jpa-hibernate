@@ -39,4 +39,34 @@ public class UserService {
 		// retorna o registro, após a inserção
 		return this.repository.save(obj);
 	}
+
+	// método que remove um registro no BD
+	public void delete(Long id) {
+
+		// retorna o registro, após a inserção
+		this.repository.deleteById(id);
+	}
+
+	// método que edita um registro no BD
+	public User update(Long id, User obj) {
+
+		// preparando um objeto monitorado
+		// é mais performático do que o findById
+		User entity = this.repository.getReferenceById(id);
+
+		// editando os atributos permitidos
+		updateData(entity, obj);
+
+		// retorna o registro, após a edição
+		return this.repository.save(entity);
+	}
+
+	// método auxiliar para realizar a edição de atributos permitidos de um registro
+	private void updateData(User entity, User obj) {
+
+		// editando os atributos permitidos
+		entity.setName(obj.getName());
+		entity.setEmail(obj.getEmail());
+		entity.setPhone(obj.getPhone());
+	}
 }
