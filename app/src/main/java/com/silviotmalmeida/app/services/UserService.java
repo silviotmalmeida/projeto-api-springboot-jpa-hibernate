@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.silviotmalmeida.app.entities.User;
 import com.silviotmalmeida.app.repositories.UserRepository;
+import com.silviotmalmeida.app.services.exceptions.ResourceNotFoundException;
 
 // classe de serviço que realiza a comunicação entre o UserResource e o UserRepository
 // registrando a classe como service
@@ -29,8 +30,8 @@ public class UserService {
 		// obtendo o registro
 		Optional<User> obj = this.repository.findById(id);
 
-		// retorna o registro, se existir
-		return obj.get();
+		// se existir, retorna o registro, senão lança uma exceção
+		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 
 	// método que insere um registro no BD
