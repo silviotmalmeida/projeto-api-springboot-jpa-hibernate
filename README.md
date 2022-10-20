@@ -8,7 +8,9 @@ O projeto encontra-se dockerizado para facilitar a implantação. As orientaçõ
 
 - Para iniciar o container utiliza-se o comando "sudo ./startContainers.sh";
 
-- Para iniciar o servidor utiliza-se o comando "sudo ./runApp.sh";
+- Para compilar o projeto utiliza-se o comando "sudo ./makeBuild.sh";
+
+- Para iniciar o app utiliza-se o comando "sudo ./runApp.sh";
 
 - O sistema estará disponível na URL "0.0.0.0:8080";
 
