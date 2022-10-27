@@ -14,6 +14,8 @@ O projeto encontra-se dockerizado para facilitar a implantação. As orientaçõ
 
 - O sistema estará disponível na URL "0.0.0.0:8080";
 
+- Os endpoints implementados são /categories, /orders, /products e /users ;
+
 - Para encerrar a execução utiliza-se o comando "sudo ./stopContainers.sh";
 
 Foram incluídos diversos comentários para facilitar o entendimento do código.
